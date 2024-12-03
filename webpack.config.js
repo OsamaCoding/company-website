@@ -6,7 +6,9 @@ const path = require("path");
 
 module.exports = {
   entry: "./src/js/index.js",
-
+  performance: {
+    hints: false,
+  },
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "js/bundle.js",
@@ -29,8 +31,29 @@ module.exports = {
       },
 
       {
+        test: /\.(svg|eot|woff|woff2|ttf)$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]",
+              outputPath: "fonts",
+            },
+          },
+        ],
+      },
+
+      {
         test: /\.html$/i,
         loader: "html-loader",
+      },
+
+      {
+        test: require.resolve("jquery"),
+        loader: "expose-loader",
+        options: {
+          exposes: ["$", "jQuery"],
+        },
       },
     ],
   },
